@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/kevnm24/Techdegree-Project-10/issues"
   },
-  "homepage": "https://github.com/kevnm24/Techdegree-Project-10#readme"
+  "homepage": "https://github.com/kevnm24/Techdegree-Project-10#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "react": "^16.6.3",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1"
+  }
 }

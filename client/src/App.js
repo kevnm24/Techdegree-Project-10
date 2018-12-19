@@ -1,28 +1,62 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './styles/global.css';
+import {
+  BrowserRouter,
+  Route
+} from 'react-router-dom';
+
+// these are the components
+import Header from './components/Header';
+import Courses from './components/Courses';
+import CourseDetail from './components/Course-Detail';
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+    // constructor() {
+    //     super();
+    //     this.state = {
+    //         items: [],
+    //         isLoaded: false
+    //     }
+    // }
+    // componentDidMount() {
+    //     fetch('http://localhost:5000/api/courses')
+    //         .then(res => res.json())
+    //         .then(json => {
+    //             this.setState({
+    //                 isLoaded: true,
+    //                 items: json
+    //             })
+    //         });
+    // }
+    // render() {
+    //     var { isLoaded, items } = this.state;
+    //     if (!isLoaded) {
+    //         return <div>Loading...</div>;
+    //     }
+    //     return (
+    //         <div className="App">
+    //
+    //             <ul>
+    //                 {items.map(item => (
+    //                     <li key="{item.id}">
+    //                         Title: {item.title} | Description: {item.description}
+    //                     </li>
+    //                 ))}
+    //             </ul>
+    //         </div>
+    //     );
+    // }
 
+    render() {
+      return (
+        <BrowserRouter>
+          <div>
+          <Route path='/' render={() => <Header />}/>
+          <Route exact path='/courses' render={() => <Courses />}/>
+          <Route exact path='/courses/detail' render={() => <CourseDetail />}/>
+          </div>
+        </BrowserRouter>
+      );
+    };
+};
 export default App;
