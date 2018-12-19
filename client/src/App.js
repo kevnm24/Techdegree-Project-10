@@ -53,7 +53,7 @@ class App extends Component {
           <div>
           <Route path='/' render={() => <Header />}/>
           <Route exact path='/courses' render={() => <Courses />}/>
-          <Route exact path='/courses/detail' render={() => <CourseDetail />}/>
+          <Route exact path='/courses/:detail' component={CourseDetail} />
           </div>
         </BrowserRouter>
       );

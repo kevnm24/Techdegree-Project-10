@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {NavLink} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 class Courses extends Component {
 
@@ -31,10 +31,10 @@ class Courses extends Component {
         {courses.map(course => (
           <div className="bounds">
             <div className="grid-33">
-              <NavLink to='/Courses/detail' className="course--module course--link">
+              <Link to={`/courses/${course._id}`} className="course--module course--link">
               <h4 className="course--label">Course</h4>
               <h3 className="course--title">{course.title}</h3>
-              </NavLink>
+              </Link>
             </div>
           </div>
         ))};
