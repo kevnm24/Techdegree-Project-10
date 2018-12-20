@@ -9,6 +9,8 @@ import {
 import Header from './components/Header';
 import Courses from './components/Courses';
 import CourseDetail from './components/Course-Detail';
+import SignIn from './components/Sign-In';
+import SignUp from './components/Sign-Up';
 
 class App extends Component {
     // constructor() {
@@ -54,6 +56,8 @@ class App extends Component {
           <Route path='/' render={() => <Header />}/>
           <Route exact path='/courses' render={() => <Courses />}/>
           <Route exact path='/courses/:detail' component={CourseDetail} />
+          <Route exact path='/signIn' component={SignIn} />
+          <Route exact path='/signUp' render={() => <SignUp />}/>
           </div>
         </BrowserRouter>
       );
