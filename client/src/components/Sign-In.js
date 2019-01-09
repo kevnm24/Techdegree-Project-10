@@ -1,81 +1,54 @@
 import React, { Component } from 'react';
-import {NavLink} from 'react-router-dom';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import Button from 'react-bootstrap/lib/Button';
+import {Link} from 'react-router-dom';
+import { Consumer } from './Context'
+import {withRouter} from 'react-router';
 
 class SignIn extends Component {
 
-  constructor(props) {
-    super(props);
-
+  constructor() {
+    super();
     this.state = {
       emailAddress: '',
-      password: ''
-    };
+      password: '',
+    }
   }
 
-  validateForm() {
-    return this.state.emailAddress.length > 0 && this.state.password.length > 0
+  handleChange = e => {
+    this.setState({[e.target.id]: e.target.value});
   }
 
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
-  }
-
-  handleSubmit = event => {
-    event.preventDefault();
-    console.log("User Email : " + this.state.emailAddress)
-    const url = 'http://localhost:5000/api/users'
-    const data = {emailAddress:this.state.emailAddress, password:this.state.password}
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-    }).then(res => res.json())
-    .then(response => console.log('Success:', JSON.stringify(response)))
-    .catch(error => console.error('Error:', error));
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.logIn(this.state.emailAddress, this.state.password)
   }
 
 // this renders the html
 render() {
   return (
-    <div className="bounds">
-      <div className="grid-33 centered signin">
-        <h1>Sign In</h1>
-        <div>
-          <form onSubmit={this.handleSubmit}>
-            <FormGroup controlId="emailAddress" bsSize="large">
-              <FormControl
-                placeholder="Email Address"
-                autoFocus
-                type="emailAddress"
-                value={this.state.emailAddress}
-                onChange={this.handleChange}
-              />
-            </FormGroup>
-            <FormGroup controlId="password" bsSize="large">
-              <FormControl
-                placeholder="Password"
-                value={this.state.password}
-                onChange={this.handleChange}
-                type="password"
-              />
-            </FormGroup>
-            <Button disabled={!this.validateForm()} className="button" type="submit">Sign Up</Button>
-          </form>
+    <Consumer>
+      {context => {
+        if (context.signedIn){
+          this.props.history.push('/courses')
+        }
+    return(
+      <div className="bounds">
+        <div className="grid-33 centered signin">
+          <h1>Sign In</h1>
+          <div>
+            <form onSubmit={this.handleSubmit}>
+              <div><input id="emailAddress" name="emailAddress" type="text" placeholder="Email Address" onChange={this.handleChange} ref={(input) => this.emailAddress = input} value={this.state.emailAddress}></input></div>
+              <div><input id="password" name="password" type="password" placeholder="Password" onChange={this.handleChange} ref={(input) => this.password = input} value={this.state.password}></input></div>
+              <div className="grid-100 pad-bottom"><button className="button" type="submit">Sign In</button><Link to="/courses"><button className="button button-secondary">Cancel</button></Link></div>
+            </form>
+          </div>
+          <p>&nbsp;</p>
+          <p>Don't have a user account? <a href="/Sign-up">Click here</a> to sign up!</p>
         </div>
-        <p>&nbsp;</p>
-        <p>Don't have a user account? <NavLink to='/signUp' className="signin">Click here</NavLink> to sign up!</p>
       </div>
-    </div>
+        )
+      }}
+    </Consumer>
     );
   };
 };
-
-export default SignIn;
+export default withRouter (SignIn);

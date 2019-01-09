@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import './styles/global.css';
+import { Provider } from './components/Context'
 import {
   BrowserRouter,
   Route
 } from 'react-router-dom';
+import axios from 'axios';
 
 // these are the components
 import Header from './components/Header';
@@ -13,53 +15,58 @@ import SignIn from './components/Sign-In';
 import SignUp from './components/Sign-Up';
 
 class App extends Component {
-    // constructor() {
-    //     super();
-    //     this.state = {
-    //         items: [],
-    //         isLoaded: false
-    //     }
-    // }
-    // componentDidMount() {
-    //     fetch('http://localhost:5000/api/courses')
-    //         .then(res => res.json())
-    //         .then(json => {
-    //             this.setState({
-    //                 isLoaded: true,
-    //                 items: json
-    //             })
-    //         });
-    // }
-    // render() {
-    //     var { isLoaded, items } = this.state;
-    //     if (!isLoaded) {
-    //         return <div>Loading...</div>;
-    //     }
-    //     return (
-    //         <div className="App">
-    //
-    //             <ul>
-    //                 {items.map(item => (
-    //                     <li key="{item.id}">
-    //                         Title: {item.title} | Description: {item.description}
-    //                     </li>
-    //                 ))}
-    //             </ul>
-    //         </div>
-    //     );
-    // }
+
+  constructor() {
+    super();
+    this.state = {
+      signedIn: false,
+      user: ''
+    }
+  }
+
+  logIn = (email, password) => {
+    axios.get('http://localhost:5000/api/users', {
+      auth: {
+        username: email,
+        password: password
+     }
+   })
+   .then(response => {
+     if(response.status === 200 || response.status === 304) {
+       this.setState({
+         signedIn: true
+       });
+     }
+   })
+   .catch(error => {
+     if(error.response.status === 401) {
+       this.setState({
+         signedIn: false
+       })
+     }
+   })
+  }
+
+  logOut = () => {
+    localStorage.clear();
+    this.props.history.push('/signIn');
+  }
 
     render() {
       return (
+        <Provider value={{
+          signedIn: this.state.signedIn
+        }}>
         <BrowserRouter>
           <div>
-          <Route path='/' render={() => <Header />}/>
+          <Route path='/' render={() => <Header logOut={this.logOut} />}/>
           <Route exact path='/courses' render={() => <Courses />}/>
           <Route exact path='/courses/:detail' component={CourseDetail} />
-          <Route exact path='/signIn' component={SignIn} />
+          <Route path="/signIn" render={ () => <SignIn logIn={this.logIn} />}/>
           <Route exact path='/signUp' render={() => <SignUp />}/>
           </div>
         </BrowserRouter>
+        </Provider>
       );
     };
 };
