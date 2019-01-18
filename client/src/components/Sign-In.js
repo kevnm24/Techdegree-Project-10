@@ -8,18 +8,17 @@ class SignIn extends Component {
   constructor() {
     super();
     this.state = {
-      emailAddress: '',
+      user: '',
       password: '',
     }
   }
 
-  handleChange = e => {
-    this.setState({[e.target.id]: e.target.value});
-  }
+  Name = e => { this.setState({user: e.target.value}) }
+  Pass = e => { this.setState({password: e.target.value}) }
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.logIn(this.state.emailAddress, this.state.password)
+    this.props.logIn(this.state.user, this.state.password)
   }
 
 // this renders the html
@@ -36,8 +35,8 @@ render() {
           <h1>Sign In</h1>
           <div>
             <form onSubmit={this.handleSubmit}>
-              <div><input id="emailAddress" name="emailAddress" type="text" placeholder="Email Address" onChange={this.handleChange} ref={(input) => this.emailAddress = input} value={this.state.emailAddress}></input></div>
-              <div><input id="password" name="password" type="password" placeholder="Password" onChange={this.handleChange} ref={(input) => this.password = input} value={this.state.password}></input></div>
+              <div><input id="emailAddress" name="emailAddress" type="text" placeholder="Email Address" onChange={this.Name} ref={(input) => this.user = input} value={this.state.user}></input></div>
+              <div><input id="password" name="password" type="password" placeholder="Password" onChange={this.Pass} ref={(input) => this.password = input} value={this.state.password}></input></div>
               <div className="grid-100 pad-bottom"><button className="button" type="submit">Sign In</button><Link to="/courses"><button className="button button-secondary">Cancel</button></Link></div>
             </form>
           </div>

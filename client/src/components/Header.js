@@ -5,6 +5,14 @@ import {Consumer} from './Context';
 class Header extends Component {
 
 // this renders the html
+logOut = () => {
+  this.setState({
+    signedIn: false
+  })
+  window.sessionStorage.clear();
+  this.props.history.push('/courses');
+}
+
   render(){
 
   return (
@@ -16,7 +24,7 @@ class Header extends Component {
             <div className="bounds">
               <h1 className="header--logo">Courses</h1>
               <nav>
-                <Link to='/signin' className="signin">Sign Out</Link>
+                <Link to='/signin' className="signin" onClick={this.logOut} >Sign Out</Link>
               </nav>
             </div>
           </div>
