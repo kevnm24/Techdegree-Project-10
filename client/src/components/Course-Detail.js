@@ -26,14 +26,11 @@ class CourseDetail extends Component {
   };
 
   deleteCourse() {
-    let axiosConfig = {headers: {'Authorization': JSON.parse(window.sessionStorage.getItem('auth'))}};
+    let axiosConfig = {headers: {'Authorization': JSON.parse(window.localStorage.getItem('auth'))}};
     axios.delete(`http://localhost:5000/api/courses/${this.props.match.params.detail}`, axiosConfig)
     .then(response => {
       this.props.history.push('/courses')
     })
-    .catch(function (error) {
-     console.log(error);
-    });
   };
 
   handleDelete = e => {
@@ -43,6 +40,7 @@ class CourseDetail extends Component {
 
 // this renders the html
   render() {
+    let userId = JSON.parse(window.localStorage.getItem('user'))
     const {isLoaded, courses} = this.state;
     if (!isLoaded) {
       return <div>Loading...</div>;
@@ -54,9 +52,9 @@ class CourseDetail extends Component {
             <div className="grid-100">
             <Consumer>
             {context => {
-              if(context.signedIn){
+              if(context.signedIn && userId._id === courses.user){
                 return(
-                  <span><Link to={`/courses/${courses._id}/update`} className="button">Update Course</Link><a className="button" onClick={this.handleDelete}>Delete Course</a></span>
+                  <span><Link to={`/courses/${courses._id}/update`} className="button">Update Course</Link><button className="button" onClick={this.handleDelete}>Delete Course</button></span>
                 )
               } else {
                 return(
@@ -65,7 +63,7 @@ class CourseDetail extends Component {
               }
             }}
             </Consumer>
-              <a className="button button-secondary" href="index.html">Return to List</a>
+              <Link to='/' className="button button-secondary" href="index.html">Return to List</Link>
             </div>
           </div>
           <div className="bounds course--detail">
@@ -73,7 +71,7 @@ class CourseDetail extends Component {
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
                 <h3 className="course--title">{courses.title}</h3>
-                <p>By Joe Smith</p>
+                <p>By {courses.firstName} {courses.lastName}</p>
               </div>
               <div className="course--description">
                 <ReactMarkdown>{courses.description}</ReactMarkdown>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactMarkdown from 'react-markdown';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 class UpdateCourse extends Component {
@@ -7,15 +7,36 @@ class UpdateCourse extends Component {
   constructor() {
     super();
     this.state = {
-      title: '',
-      description: '',
-      estimatedTime: '',
-      materialsNeeded: ''
+      description:'',
+      estimatedTime:'',
+      id:'',
+      materialsNeeded:'',
+      redirect: false,
+      title:'',
+      user:'',
+      userId:'',
     }
   }
 
+  componentDidMount(){
+    axios.get(`http://localhost:5000/api/courses/${this.props.match.params.detail}`)
+    .then (response => {
+      this.setState({
+        description: response.data.description,
+        estimatedTime: response.data.estimatedTime,
+        id: response.data._id,
+        materialsNeeded: response.data.materialsNeeded,
+        title: response.data.title,
+        firstName: response.data.firstName,
+        lastName: response.data.lastName
+      })
+    })
+    .catch(error => {
+    })
+}
+
   updateCourse = (title, description, estimatedTime, materialsNeeded) => {
-    let axiosConfig = {headers: {'Authorization': JSON.parse(window.sessionStorage.getItem('auth'))}};
+    let axiosConfig = {headers: {'Authorization': JSON.parse(window.localStorage.getItem('auth'))}};
     axios.put(`http://localhost:5000/api/courses/${this.props.match.params.detail}`, {
       title: title,
       description: description,
@@ -40,16 +61,40 @@ class UpdateCourse extends Component {
   }
 // this renders the html
   render(){
+    let titleVal = null;
+    let descVal = null;
+    let headingVal = null;
+    if (this.state.title === '') {
+      titleVal = <li>Please provide a value for "Title"</li>
+      headingVal = <h2 className="validation--errors--label">Validation errors</h2>
+    } else {
+      titleVal = <li></li>
+    }
+    if (this.state.description === '') {
+      descVal = <li>Please provide a value for "Description"</li>
+      headingVal = <h2 className="validation--errors--label">Validation errors</h2>
+    } else {
+      descVal = <li></li>
+    }
     return (
       <div className="bounds course--detail">
         <h1>Update Course</h1>
         <div>
+          <div>
+            {headingVal}
+            <div className="validation-errors">
+              <ul>
+                {titleVal}
+                {descVal}
+              </ul>
+            </div>
+          </div>
           <form onSubmit={this.handleSubmit}>
             <div className="grid-66">
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
                 <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." onChange={this.handleChange} value={this.state.title}></input></div>
-                <p>By Joe Smith</p>
+                <p>By {this.state.firstName} {this.state.lastName}</p>
               </div>
               <div className="course--description">
                 <div><textarea id="description" name="description" className="" placeholder="Course description..." onChange={this.handleChange} value={this.state.description}></textarea></div>
@@ -69,7 +114,7 @@ class UpdateCourse extends Component {
                 </ul>
               </div>
             </div>
-            <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button><button className="button button-secondary">Cancel</button></div>
+            <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button><Link to='/' className="button button-secondary">Cancel</Link></div>
           </form>
         </div>
       </div>

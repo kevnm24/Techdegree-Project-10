@@ -3,7 +3,8 @@ import './styles/global.css';
 import { Provider } from './components/Context'
 import {
   BrowserRouter,
-  Route
+  Route,
+  Redirect
 } from 'react-router-dom';
 import axios from 'axios';
 
@@ -22,18 +23,12 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      signedIn: false,
-      invalidPass: false,
-      invalidUser: false,
-      user: ''
+      user: '',
+      signedIn: false
     }
   }
 
   logIn = (email, password) => {
-    this.setState({
-      invalidUser:false,
-      invalidPass:false,
-    })
     axios.get('http://localhost:5000/api/users', {
       auth: {
         username: email,
@@ -44,26 +39,24 @@ class App extends Component {
      if(response.status === 200 || response.status === 304) {
        this.setState({
          user: response.data,
-         invalidUser: false,
-         invalidPass: false,
          signedIn: true
        });
-       sessionStorage.setItem("user", JSON.stringify(response.data))
-       sessionStorage.setItem("auth", JSON.stringify(response.config.headers.Authorization))
+       localStorage.setItem("user", JSON.stringify(response.data))
+       localStorage.setItem("auth", JSON.stringify(response.config.headers.Authorization))
      }
    })
    .catch(error => {
      if(error.response.status === 401) {
        this.setState({
-         invalidUser: true
-       })
+          signedIn:false,
+      });
      }
    })
   }
 
   componentDidMount() {
-    if(sessionStorage.user){
-      let user = JSON.parse(window.sessionStorage.getItem('user'))
+    if(localStorage.user){
+      let user = JSON.parse(window.localStorage.getItem('user'))
       this.logIn(user.emailAddress, user.password)
     }
   }
@@ -71,6 +64,7 @@ class App extends Component {
     render() {
       return (
         <Provider value={{
+          user: this.state.user,
           signedIn: this.state.signedIn,
           actions: {
             create: this.createCourse,
@@ -79,11 +73,12 @@ class App extends Component {
         }}>
         <BrowserRouter>
           <div>
-          <Route path='/' render={() => <Header logOut={this.logOut} />}/>
+          <Route path='/' render={() => <Header />}/>
+          <Route exact path='/' render={ () => <Redirect to='/courses'/>} />
           <Route exact path='/courses' render={() => <Courses />}/>
           <Route exact path='/courses/:detail' component={CourseDetail} />
           <Route path="/signIn" render={ () => <SignIn logIn={this.logIn} />}/>
-          <Route exact path='/signUp' render={() => <SignUp />}/>
+          <Route exact path='/signUp' render={() => <SignUp logIn={this.logIn} />}/>
           <PrivateRoute exact path='/create-course' component={CreateCourse} />
           <PrivateRoute exact path='/courses/:detail/update' component={UpdateCourse}/>
           </div>

@@ -8,7 +8,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      sessionStorage.getItem('auth') ? (
+      localStorage.getItem('auth') ? (
         <Component {...props} />
       ) : (
         <Redirect

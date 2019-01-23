@@ -25,11 +25,11 @@ class Courses extends Component {
     var {isLoaded, courses} = this.state;
     if (!isLoaded) {
       return <div>Loading...</div>;
-    };
+    }
     return (
       <div>
         {courses.map(course => (
-          <div className="bounds">
+          <div className="bounds" key={course._id}>
             <div className="grid-33">
               <Link to={`/courses/${course._id}`} className="course--module course--link">
               <h4 className="course--label">Course</h4>

@@ -9,7 +9,7 @@ logOut = () => {
   this.setState({
     signedIn: false
   })
-  window.sessionStorage.clear();
+  window.localStorage.clear();
   this.props.history.push('/courses');
 }
 
@@ -24,7 +24,8 @@ logOut = () => {
             <div className="bounds">
               <h1 className="header--logo">Courses</h1>
               <nav>
-                <Link to='/signin' className="signin" onClick={this.logOut} >Sign Out</Link>
+                <span>Welcome {context.user.firstName} {context.user.lastName}</span>
+                  <Link to='/courses' className="signin" onClick={this.logOut} >Sign Out</Link>
               </nav>
             </div>
           </div>
