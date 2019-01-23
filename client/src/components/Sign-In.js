@@ -13,11 +13,9 @@ class SignIn extends Component {
     }
   }
 
-// function to use when form is submitted
   Name = e => { this.setState({user: e.target.value}) }
   Pass = e => { this.setState({password: e.target.value}) }
 
-// uses login from props and uses the users inputted password and email address to sign in when form is submitted
   handleSubmit = e => {
     e.preventDefault();
     this.props.logIn(this.state.user, this.state.password)

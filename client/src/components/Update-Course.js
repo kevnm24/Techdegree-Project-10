@@ -18,7 +18,6 @@ class UpdateCourse extends Component {
     }
   }
 
-// this will set the states into the input fields using axios.get and props.match
   componentDidMount(){
     axios.get(`http://localhost:5000/api/courses/${this.props.match.params.detail}`)
     .then (response => {
@@ -36,9 +35,8 @@ class UpdateCourse extends Component {
     })
 }
 
-// this will update the course with the new inputs the user has provided
   updateCourse = (title, description, estimatedTime, materialsNeeded) => {
-    let axiosConfig = {headers: {'Authorization': JSON.parse(window.sessionStorage.getItem('auth'))}};
+    let axiosConfig = {headers: {'Authorization': JSON.parse(window.localStorage.getItem('auth'))}};
     axios.put(`http://localhost:5000/api/courses/${this.props.match.params.detail}`, {
       title: title,
       description: description,
@@ -53,19 +51,16 @@ class UpdateCourse extends Component {
     });
   }
 
-// targets id and sets the state with its value
   handleChange = e => {
     this.setState({[e.target.id]: e.target.value});
   }
 
-// handles updateCourse to update the courses with the user inputs
   handleSubmit = e => {
     e.preventDefault();
     this.updateCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
   }
 // this renders the html
   render(){
-// validation errors
     let titleVal = null;
     let descVal = null;
     let headingVal = null;

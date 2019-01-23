@@ -13,10 +13,10 @@ class SignUp extends Component {
       emailAddress: '',
       password: '',
       confirmPassword: '',
+      sigendUp: false
     }
   }
 
-// this function will sign in the user with the information the user input
   signUp = (firstName, lastName, emailAddress, password) => {
     axios.post('http://localhost:5000/api/users', {
       firstName: firstName,
@@ -37,12 +37,10 @@ class SignUp extends Component {
    });
   }
 
-// sets the state with the value that user input
   handleChange = e => {
     this.setState({[e.target.id]: e.target.value});
   }
 
-// handles signUp function only if both passwords match
   handleSubmit = e => {
     e.preventDefault();
     if(this.state.password === this.state.confirmPassword){
@@ -51,7 +49,6 @@ class SignUp extends Component {
   }
 // this renders the html
 render() {
-// validation errors
   let emailVal = null;
   let passVal = null;
   let passMatchVal = null;

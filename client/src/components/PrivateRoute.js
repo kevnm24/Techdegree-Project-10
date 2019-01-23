@@ -4,12 +4,11 @@ import {
     Redirect
   } from 'react-router-dom';
 
-// the privateRoute will be used for pages that need the user to be logged in order to view the page
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={props =>
-      sessionStorage.getItem('auth') ? (
+      localStorage.getItem('auth') ? (
         <Component {...props} />
       ) : (
         <Redirect

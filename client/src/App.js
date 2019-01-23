@@ -28,7 +28,6 @@ class App extends Component {
     }
   }
 
-// this will log in the user if their email address  and passwords are valid if not nothing will happend
   logIn = (email, password) => {
     axios.get('http://localhost:5000/api/users', {
       auth: {
@@ -42,8 +41,8 @@ class App extends Component {
          user: response.data,
          signedIn: true
        });
-       sessionStorage.setItem("user", JSON.stringify(response.data))
-       sessionStorage.setItem("auth", JSON.stringify(response.config.headers.Authorization))
+       localStorage.setItem("user", JSON.stringify(response.data))
+       localStorage.setItem("auth", JSON.stringify(response.config.headers.Authorization))
      }
    })
    .catch(error => {
@@ -55,11 +54,22 @@ class App extends Component {
    })
   }
 
+  componentDidMount() {
+    if(localStorage.user){
+      let user = JSON.parse(window.localStorage.getItem('user'))
+      this.logIn(user.emailAddress, user.password)
+    }
+  }
+
     render() {
       return (
         <Provider value={{
           user: this.state.user,
-          signedIn: this.state.signedIn
+          signedIn: this.state.signedIn,
+          actions: {
+            create: this.createCourse,
+            logIn: this.logIn,
+          }
         }}>
         <BrowserRouter>
           <div>
