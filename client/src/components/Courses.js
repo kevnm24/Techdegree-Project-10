@@ -10,6 +10,8 @@ class Courses extends Component {
           isLoaded: false
       };
   };
+
+// this will get all the courses and will display each one by using .map() function
   componentDidMount() {
       fetch('http://localhost:5000/api/courses')
           .then(res => res.json())
@@ -20,6 +22,7 @@ class Courses extends Component {
               });
           });
   };
+
 // this renders the html
   render() {
     var {isLoaded, courses} = this.state;

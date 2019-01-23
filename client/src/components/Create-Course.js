@@ -14,9 +14,11 @@ class CreateCourse extends Component {
     }
   }
 
+// this takes the provided inputs and posts to create a new course,
+// it also uses authorization header to authorize the post
   newCourse = (title, description, estimatedTime, materialsNeeded) => {
-    let axiosConfig = {headers: {'Authorization': JSON.parse(window.localStorage.getItem('auth'))}};
-    let userId = JSON.parse(window.localStorage.getItem('user'))
+    let axiosConfig = {headers: {'Authorization': JSON.parse(window.sessionStorage.getItem('auth'))}};
+    let userId = JSON.parse(window.sessionStorage.getItem('user'))
     axios.post('http://localhost:5000/api/courses', {
       user: userId._id,
       firstName: userId.firstName,
@@ -34,10 +36,12 @@ class CreateCourse extends Component {
    });
   }
 
+// this will target the values the user types in into each input box and set its state
   handleChange = e => {
     this.setState({[e.target.id]: e.target.value});
   }
 
+// this handles the newCourse() function to make a new courses when form is submitted
   handleSubmit = e => {
     e.preventDefault();
     this.newCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
@@ -45,6 +49,8 @@ class CreateCourse extends Component {
 
 // this renders the html
   render(){
+    let userId = JSON.parse(window.sessionStorage.getItem('user'))
+// these are validation errors and will disapear until the user types in a value
     let titleVal = null;
     let descVal = null;
     let headingVal = null;
@@ -78,7 +84,7 @@ class CreateCourse extends Component {
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
                 <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." onChange={this.handleChange} value={this.state.title}></input></div>
-                <p>By Joe Smith</p>
+                <p>By {userId.firstName} {userId.lastName}</p>
               </div>
               <div className="course--description">
                 <div><textarea id="description" name="description" className="" placeholder="Course description..." onChange={this.handleChange} value={this.state.description}></textarea></div>

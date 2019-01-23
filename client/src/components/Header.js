@@ -4,20 +4,20 @@ import {Consumer} from './Context';
 
 class Header extends Component {
 
-// this renders the html
+// this will logout the user
 logOut = () => {
   this.setState({
     signedIn: false
   })
-  window.localStorage.clear();
+  window.sessionStorage.clear();
   this.props.history.push('/courses');
 }
 
   render(){
-
   return (
     <Consumer>
     {context =>{
+// this will determine if the user is signed in if they are it will welcome them and display logout button
       if(context.signedIn){
         return(
           <div className="header">

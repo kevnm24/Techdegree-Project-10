@@ -14,6 +14,7 @@ class CourseDetail extends Component {
       };
   };
 
+//this will fetch the specific courses details depending on their id
   componentDidMount() {
       fetch(`http://localhost:5000/api/courses/${this.props.match.params.detail}`)
         .then(res => res.json())
@@ -25,14 +26,16 @@ class CourseDetail extends Component {
         });
   };
 
+// this will delete a course
   deleteCourse() {
-    let axiosConfig = {headers: {'Authorization': JSON.parse(window.localStorage.getItem('auth'))}};
+    let axiosConfig = {headers: {'Authorization': JSON.parse(window.sessionStorage.getItem('auth'))}};
     axios.delete(`http://localhost:5000/api/courses/${this.props.match.params.detail}`, axiosConfig)
     .then(response => {
       this.props.history.push('/courses')
     })
   };
 
+// this will handle the deleteCourse function when button is clicked
   handleDelete = e => {
     e.preventDefault()
     this.deleteCourse()
@@ -40,12 +43,13 @@ class CourseDetail extends Component {
 
 // this renders the html
   render() {
-    let userId = JSON.parse(window.localStorage.getItem('user'))
+    let userId = JSON.parse(window.sessionStorage.getItem('user'))
     const {isLoaded, courses} = this.state;
     if (!isLoaded) {
       return <div>Loading...</div>;
     };
     return (
+// this will show update and delete button only if user is signed in and the users id matched the id with the usert hat created the course
       <div>
         <div className="actions--bar">
           <div className="bounds">
