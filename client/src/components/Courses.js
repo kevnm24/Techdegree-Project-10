@@ -38,6 +38,7 @@ class Courses extends Component {
             </div>
           </div>
         ))};
+        <div className="bounds">
           <div className="grid-33">
             <Link className="course--module course--add--module" to='/create-course'>
             <h3 className="course--add--title">
@@ -46,6 +47,7 @@ class Courses extends Component {
             </svg>New Course</h3>
             </Link>
           </div>
+        </div>
       </div>
     );
   };
